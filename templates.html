@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyPilot Pro | Optimizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; }
+        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(51, 65, 85, 0.5); }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex">
+
+    <aside class="w-80 bg-slate-900 border-r border-slate-800 hidden lg:flex flex-col p-8">
+        <div class="flex items-center space-x-3 mb-12">
+            <div class="p-2 bg-indigo-500 rounded-lg shadow-lg shadow-indigo-500/40">
+                <i class="fas fa-brain text-white text-xl"></i>
+            </div>
+            <span class="text-2xl font-extrabold tracking-tighter italic text-white">PILOT PRO</span>
+        </div>
+
+        <nav class="flex-1 space-y-3">
+            <a href="#" class="flex items-center space-x-4 p-4 bg-indigo-500/10 text-indigo-400 rounded-xl border-r-4 border-indigo-500 font-bold">
+                <i class="fas fa-compass"></i><span>Dashboard</span>
+            </a>
+            <a href="#" class="flex items-center space-x-4 p-4 text-slate-500 hover:bg-slate-800/50 rounded-xl transition">
+                <i class="fas fa-archive"></i><span>Archive</span>
+            </a>
+            <a href="#" class="flex items-center space-x-4 p-4 text-slate-500 hover:bg-slate-800/50 rounded-xl transition">
+                <i class="fas fa-sliders"></i><span>Preferences</span>
+            </a>
+        </nav>
+
+        <div class="glass p-6 rounded-2xl">
+            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3">Engine Status</p>
+            <div class="flex items-center space-x-3 text-emerald-400">
+                <div class="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></div>
+                <span class="text-xs font-bold uppercase">Main.txt Loaded</span>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-6 lg:p-12 overflow-y-auto">
+        <header class="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+                <h1 class="text-4xl font-black text-white">Smart Study Matrix</h1>
+                <p class="text-slate-400 mt-1">Strategic topic prioritization and effort modeling.</p>
+            </div>
+            <button onclick="pilot.analyze()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-black px-10 py-4 rounded-2xl shadow-xl shadow-indigo-600/20 transition-all active:scale-95">
+                <i class="fas fa-bolt-lightning mr-2"></i>OPTIMIZE PLAN
+            </button>
+        </header>
+
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-10">
+            <div class="xl:col-span-4">
+                <div class="glass p-8 rounded-3xl shadow-2xl">
+                    <h2 class="text-xl font-bold mb-8 flex items-center text-white">
+                        <i class="fas fa-plus-square mr-3 text-indigo-400"></i>Register Topic
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="text-[10px] font-black text-slate-500 uppercase tracking-tighter">Topic Title</label>
+                            <input type="text" id="subj" placeholder="e.g. Quantum Physics" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-4 mt-2 focus:ring-2 focus:ring-indigo-500 outline-none transition text-white">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-black text-slate-500 uppercase tracking-tighter">Exam Deadline</label>
+                            <input type="date" id="deadline" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-4 mt-2 outline-none text-white">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-black text-slate-500 uppercase tracking-tighter">Complexity Weight (1-10)</label>
+                            <input type="range" id="level" min="1" max="10" class="w-full h-2 bg-slate-700 rounded-lg mt-4 appearance-none cursor-pointer accent-indigo-500">
+                        </div>
+                        <button onclick="pilot.collect()" class="w-full bg-slate-100 text-slate-900 font-black py-4 rounded-xl hover:bg-white transition-all">
+                            Queue Subject
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="xl:col-span-8">
+                <div class="bg-slate-900/50 border border-slate-800 rounded-3xl overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-800/40 text-slate-500 text-[10px] font-black uppercase tracking-widest">
+                            <tr>
+                                <th class="px-8 py-6">ID</th>
+                                <th class="px-6 py-6 text-white">Subject</th>
+                                <th class="px-6 py-6 text-white">Score</th>
+                                <th class="px-6 py-6 text-white">Daily Target</th>
+                                <th class="px-6 py-6 text-white">Priority</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsTable" class="divide-y divide-slate-800/50">
+                            </tbody>
+                    </table>
+                </div>
+                
+                <div id="emptyState" class="mt-12 text-center py-20 border-2 border-dashed border-slate-800 rounded-3xl">
+                    <p class="text-slate-500 font-bold uppercase tracking-widest text-xs">No active study data in matrix</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const pilot = {
+            queue: [],
+            
+            collect() {
+                const label = document.getElementById('subj').value;
+                const date = document.getElementById('deadline').value;
+                const level = document.getElementById('level').value;
+
+                if (!label || !date) return alert("System Error: Mandatory Fields Missing");
+
+                this.queue.push({ label, deadline: date, level });
+                document.getElementById('subj').value = '';
+                document.getElementById('emptyState').classList.add('hidden');
+                console.log("Queue Updated:", label);
+            },
+
+            async analyze() {
+                if (this.queue.length === 0) return alert("Buffer Empty: Add subjects first.");
+
+                const res = await fetch('/api/v1/optimize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tasks: this.queue })
+                });
+
+                const data = await res.json();
+                this.render(data.payload);
+            },
+
+            render(items) {
+                const table = document.getElementById('resultsTable');
+                table.innerHTML = items.map((t, idx) => `
+                    <tr class="hover:bg-indigo-500/5 transition group">
+                        <td class="px-8 py-6 font-mono text-slate-600 text-xs">#0${idx + 1}</td>
+                        <td class="px-6 py-6 font-bold text-white">${t.title}</td>
+                        <td class="px-6 py-6 font-mono text-indigo-400 text-sm font-bold">${t.score}</td>
+                        <td class="px-6 py-6 text-emerald-400 font-black tracking-tighter italic">${t.load}</td>
+                        <td class="px-6 py-6">
+                            <span class="px-4 py-1 rounded-full text-[9px] font-black tracking-widest ${t.theme}">
+                                ${t.intensity}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        };
+    </script>
+</body>
+</html>
